@@ -57,30 +57,6 @@ class APIClient:
         else:
             raise Exception(f'Error {response.status_code}: {response.text}')
 
-    def make_request(self, endpoint, method='GET', params=None, data=None, headers=None):
-        '''
-        Make an HTTP request to the API.
-
-        Args:
-            endpoint (str): The API endpoint to call.
-            method (str): The HTTP method to use (e.g., GET, POST, PUT, DELETE).
-            params (dict, optional): Dictionary of URL parameters.
-            data (dict, optional): Dictionary of data to send in the body of the request.
-            headers (dict, optional): Dictionary of HTTP headers.
-
-        Returns:
-            dict: JSON response from the API.
-        '''
-        url = self.base_url + endpoint
-        response = requests.request(method, url, params=params, data=data, headers=headers)
-
-        # Check if the request was successful (status code 2XX)
-        if response.status_code // 100 == 2:
-            return response.json()
-        else:
-            # If the request was not successful, raise an exception
-            raise Exception(f'Error {response.status_code}: {response.text}')
-
 # Example usage:
 # api_client = APIClient('https://api.example.com')
 # response = api_client.make_request('/endpoint', method='GET', params={'param': 'value'})
