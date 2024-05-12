@@ -1,4 +1,4 @@
-class SearchResult:
+class MovieSearchResult:
     def __init__(self, **kwargs):
         self.backdrop_path = kwargs.get('backdrop_path', None)
         self.genre_ids = kwargs.get('genre_ids', None)
