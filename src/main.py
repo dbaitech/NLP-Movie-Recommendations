@@ -3,6 +3,8 @@ nltk.download('punkt')
 from nltk.tokenize import word_tokenize
 from src.utils.api_client import APIClient
 from src.utils.utils import int_list_to_str
+from src.models.discover_movies_params import DiscoverMoviesParams
+from src.utils.utils import flatten_dict
 
 # prompt = "I want to watch a movie similar to The Imitation Game so that I can be inspired and be in love with math again."
 
@@ -19,8 +21,10 @@ api_client = APIClient(base_url)
 title = "The Imitation Game"
 genre_ids = api_client.get_movie_genre_ids(title)
 keywords = api_client.get_movie_keywords(title)
-print("genres: ", genre_ids)
-print("keywords: ", keywords)
 keyword_id_str = int_list_to_str(keywords, 'id')
 genre_id_str = int_list_to_str(genre_ids)
-print(keyword_id_str, genre_id_str)
+params = DiscoverMoviesParams()
+params.with_keywords = keyword_id_str
+params.with_genres = genre_id_str
+params = flatten_dict(params.__dict__)
+print(params)
