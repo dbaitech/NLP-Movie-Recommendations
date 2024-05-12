@@ -1,16 +1,22 @@
-import nltk
-nltk.download('punkt')
-from nltk.tokenize import word_tokenize
+import spacy
 from src.utils.api_client import APIClient
 from src.utils.utils import int_list_to_str
 from src.models.discover_movies_params import DiscoverMoviesParams
 from src.utils.utils import flatten_dict
 
+nlp = spacy.load("en_core_web_sm")
+
 prompt = "I want to watch a movie similar to The Imitation Game so that I can be inspired."
 
-# Tokenize the user prompt
-tokens = word_tokenize(prompt)
-print("Tokens:", tokens)
+doc = nlp(prompt)
+
+relevant_tokens = []
+for token in doc:
+    print(token.ent_type_)
+    if token.pos_ in ['NOUN', 'PROPN'] or token.ent_type_ == 'DATE':
+        relevant_tokens.append(token.text)
+
+print("Relevant tokens:", relevant_tokens)
 
 base_url = 'https://api.themoviedb.org/3'
 api_client = APIClient(base_url)
