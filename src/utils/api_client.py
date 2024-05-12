@@ -1,6 +1,6 @@
 import requests
 import os
-from dotenv import load_dotenv, dotenv_values
+from dotenv import load_dotenv
 
 class APIClient:
     def __init__(self, base_url):
@@ -31,7 +31,8 @@ class APIClient:
         else:
             raise Exception(f'Error {response.status_code}: {response.text}')
 
-    def get_movie_keywords(self, movie_id):
+    def get_movie_keywords(self, title):
+        movie_id = self.get_movie_id(title)
         url = f'{self.base_url}/movie/{movie_id}/keywords'
         response = self.session.get(url)
         if response.status_code // 100 == 2:
@@ -47,10 +48,10 @@ class APIClient:
         movie_info = self.search_movie(title)
         return movie_info['id']
 
-    def get_similar_movies(self, genres, keywords):
+    def get_similar_movies(self, movie_attributes: dict):
         url = f'{self.base_url}/discover/movie'
-        params = {'include_adult': 'false', 'include_video': 'false', 'sort_by': 'popularity.desc',
-                  'with_genres': genres, 'with_keywords': keywords}
+        params = {'include_adult': 'false', 'include_video': 'false', 'sort_by': 'popularity.desc'}
+        params.update(movie_attributes)
         response = self.session.get(url, params=params)
         if response.status_code // 100 == 2:
             return response.json()['results']
