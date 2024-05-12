@@ -31,8 +31,7 @@ class APIClient:
         else:
             raise Exception(f'Error {response.status_code}: {response.text}')
 
-    def get_movie_keywords(self, title):
-        movie_id = self.get_movie_id(title)
+    def get_movie_keywords(self, movie_id):
         url = f'{self.base_url}/movie/{movie_id}/keywords'
         response = self.session.get(url)
         if response.status_code // 100 == 2:

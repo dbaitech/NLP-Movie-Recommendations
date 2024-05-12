@@ -2,6 +2,7 @@ import spacy
 from src.utils.api_client import APIClient
 from src.utils.utils import int_list_to_str
 from src.models.discover_movies_params import DiscoverMoviesParams
+from src.models.search_result import SearchResult
 from src.utils.utils import flatten_dict
 
 nlp = spacy.load("en_core_web_sm")
@@ -23,8 +24,10 @@ api_client = APIClient(base_url)
 
 # search movie
 title = "The Imitation Game"
-genre_ids = api_client.get_movie_genre_ids(title)
-keywords = api_client.get_movie_keywords(title)
+movie = SearchResult(**api_client.search_movie(title))
+
+genre_ids = movie.genre_ids
+keywords = api_client.get_movie_keywords(movie.id)
 
 keyword_id_str = int_list_to_str(keywords, 'id')
 genre_id_str = int_list_to_str(genre_ids)
