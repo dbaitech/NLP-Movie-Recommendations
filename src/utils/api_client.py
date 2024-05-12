@@ -57,8 +57,3 @@ class APIClient:
             return response.json()['results']
         else:
             raise Exception(f'Error {response.status_code}: {response.text}')
-
-# Example usage:
-# api_client = APIClient('https://api.example.com')
-# response = api_client.make_request('/endpoint', method='GET', params={'param': 'value'})
-# print(response)
