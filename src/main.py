@@ -1,11 +1,15 @@
+import os
+
 import spacy
 from src.utils.api_client import APIClient
 from src.utils.utils import int_list_to_str
 from src.models.discover_movies_params import DiscoverMoviesParams
 from src.models.movie_search_result import MovieSearchResult
 from src.utils.utils import flatten_dict
+from openai import OpenAI
 
 nlp = spacy.load("en_core_web_sm")
+client = OpenAI()
 
 prompt = "I want to watch a movie similar to The Imitation Game so that I can be inspired."
 
