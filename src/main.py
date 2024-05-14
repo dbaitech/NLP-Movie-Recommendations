@@ -10,20 +10,19 @@ from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
-nlp = spacy.load("en_core_web_sm")
 client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 
 prompt = "I want to watch a movie similar to The Imitation Game so that I can be inspired."
 
-doc = nlp(prompt)
-
-relevant_tokens = []
-for token in doc:
-    print(token.ent_type_)
-    if token.pos_ in ['NOUN', 'PROPN'] or token.ent_type_ == 'DATE':
-        relevant_tokens.append(token.text)
-
-print("Relevant tokens:", relevant_tokens)
+# nlp = spacy.load("en_core_web_sm")
+# doc = nlp(prompt)
+# # relevant_tokens = []
+# for token in doc:
+#     print(token.ent_type_)
+#     if token.pos_ in ['NOUN', 'PROPN'] or token.ent_type_ == 'DATE':
+#         relevant_tokens.append(token.text)
+#
+# print("Relevant tokens:", relevant_tokens)
 
 base_url = 'https://api.themoviedb.org/3'
 api_client = APIClient(base_url)
