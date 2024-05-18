@@ -53,8 +53,11 @@ class APIClient:
         response = self.session.get(url, params=params)
         if response.status_code // 100 == 2:
             search_results = response.json()['results']
-            # return an object that holds the row attributes
-            return search_results[0]
+            if search_results:
+                # return an object that holds the row attributes
+                return search_results[0]
+            else:
+                return None
         else:
             raise Exception(f'Error {response.status_code}: {response.text}')
 

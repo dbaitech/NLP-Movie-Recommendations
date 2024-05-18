@@ -27,10 +27,10 @@ def get_prompt_categories(prompt):
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user",
-             "content": f"Extract the categories from the following text and assign them into the JSON object's "
-                        f"categories. Be careful to place any movie titles in the appropriate category, not just "
+             "content": f"Extract the words from the following text and assign them into the JSON object's "
+                        f"categories. Be careful to place any movie titles in the movie_title category, not just "
                         f"in with_keywords. Return only the given JSON object with filled in values."
-                        f"{prompt}\n\n"
+                        f"Text: {prompt}\n\n"
                         f"Categories: {categories}\n\n"},
         ]
     )
@@ -38,10 +38,9 @@ def get_prompt_categories(prompt):
 
 
 prompt = "I want to watch a movie similar to The Imitation Game so that I can be inspired."
-# ai_response = get_prompt_categories(prompt)
-# content = json.loads(ai_response.choices[0].message.content)
-# categories = content['categories']
-categories = {'primary_release_year': None, 'primary_release_date': {'gte': None, 'lte': None}, 'region': None, 'with_cast': None, 'with_companies': None, 'with_crew': None, 'with_genres': None, 'with_keywords': ['inspired', 'mathematics', 'biography'], 'with_origin_country': None, 'with_original_language': None, 'with_people': None, 'with_runtime': {'gte': None, 'lte': None}, 'without_companies': None, 'without_genres': None, 'without_keywords': None, 'movie_title': 'The Imitation Game'}
+ai_response = get_prompt_categories(prompt)
+content = json.loads(ai_response.choices[0].message.content)
+categories = Categories(**content)
 
 base_url = 'https://api.themoviedb.org/3'
 api_client = APIClient(base_url)
@@ -49,8 +48,8 @@ api_client = APIClient(base_url)
 similar_movie_genre_id_str = ''
 similar_movie_keyword_id_str = ''
 # search movie if mentioned by user
-if categories['movie_title']:
-    title = categories['movie_title']
+if categories.movie_title:
+    title = categories.movie_title
     similar_movie = MovieSearchResult(**api_client.search_movie(title))
 
     similar_movie_genre_ids = similar_movie.genre_ids
@@ -60,9 +59,9 @@ if categories['movie_title']:
     similar_movie_keyword_id_str = int_list_to_str(similar_movie_keywords, 'id')
 
 keyword_id_str = ''
-if categories['with_keywords']:
+if categories.with_keywords:
     keyword_ids = []
-    for keyword in categories['with_keywords']:
+    for keyword in categories.with_keywords:
         keyword_id = api_client.get_keyword_id(keyword)
         keyword_ids.append(keyword_id)
     keyword_id_str = int_list_to_str(keyword_ids, 'id')
