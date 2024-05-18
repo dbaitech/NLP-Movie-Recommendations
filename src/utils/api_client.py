@@ -47,6 +47,17 @@ class APIClient:
         movie_info = self.search_movie(title)
         return movie_info['id']
 
+    def get_keyword_id(self, keyword):
+        url = f'{self.base_url}/search/keyword'
+        params = {'query': keyword}
+        response = self.session.get(url, params=params)
+        if response.status_code // 100 == 2:
+            search_results = response.json()['results']
+            # return an object that holds the row attributes
+            return search_results[0]
+        else:
+            raise Exception(f'Error {response.status_code}: {response.text}')
+
     def get_similar_movies(self, movie_attributes: dict):
         url = f'{self.base_url}/discover/movie'
         params = {'include_adult': 'false', 'include_video': 'false', 'sort_by': 'popularity.desc'}
