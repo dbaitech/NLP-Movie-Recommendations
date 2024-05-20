@@ -66,7 +66,7 @@ if categories.with_keywords:
             keyword_ids.append(keyword_id)
     keyword_id_str = int_list_to_str(keyword_ids, 'id')
 
-params = DiscoverMoviesParams()
+params = DiscoverMoviesParams(**categories.to_dict())
 params.with_genres = similar_movie_genre_id_str
 params.with_keywords = keyword_id_str + '|' + similar_movie_keyword_id_str
 
